@@ -50,9 +50,16 @@ else
 fi
 
 # Install Rosetta
-fancy_echo "Installing Rosetta..."
-softwareupdate --install-rosetta --agree-to-license > /dev/null 2>&1
-fancy_echo "Rosetta is installed"
+if [ "$(uname -m)" = "arm64" ]; then
+    # If Rosetta is already installed, skip
+    if ! pkgutil --pkg-info=com.apple.pkg.RosettaUpdateAuto > /dev/null 2>&1; then
+        fancy_echo "Installing Rosetta..."
+        softwareupdate --install-rosetta --agree-to-license > /dev/null 2>&1
+        fancy_echo "Rosetta is installed"
+    else
+        fancy_echo "Rosetta is installed"
+    fi
+fi
 
 # Install Homebrew
 if ! command -v brew >/dev/null; then
