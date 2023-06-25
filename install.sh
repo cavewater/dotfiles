@@ -1,5 +1,7 @@
 #!/bin/sh
 
+arch="$(uname -m)"
+
 fancy_echo() {
     local fmt="$1"; shift
     printf "\\n$fmt\\n" "$@"
@@ -42,7 +44,6 @@ fi
 
 append_to_zshrc 'export PATH="$HOME/.bin:$PATH"'
 
-arch="$(uname -m)"
 if [ "$arch" = "arm64" ]; then
     HOMEBREW_PREFIX="/opt/homebrew"
 else
@@ -50,7 +51,7 @@ else
 fi
 
 # Install Rosetta
-if [ "$(uname -m)" = "arm64" ]; then
+if [ "$arch" = "arm64" ]; then
     # If Rosetta is already installed, skip
     if ! pkgutil --pkg-info=com.apple.pkg.RosettaUpdateAuto > /dev/null 2>&1; then
         fancy_echo "Installing Rosetta..."
